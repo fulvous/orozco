@@ -6,7 +6,6 @@ WD=$( cd "$(dirname "$0")" && pwd )
 source $WD/libs/herramientax/libs/formato/colores.sh
 source $WD/libs/herramientax/libs/formato/dialogos.sh
 
-
 function uso {
   SCRIPT=$( basename "$0" )
   jumbotron "Uso: ${SCRIPT} [ -w [size] | -v ] " \
@@ -54,7 +53,7 @@ function orozco {
   if [ ! -z "${WIDTH}" ]
   then
     debug "Looking images for resize to max-width ${WIDTH}"
-    for IMAGE in $( ls -1 | egrep -i "jpg|jpeg" | sed 's/ /@/g' )
+    for IMAGE in $( find -type f \( -name "*.jpg" -o -name "*.jpeg" -o -name "*.JPG" -o -name "*.JPEG" \) | sed 's/ /@/g' )
     do
       ORIGINAL=$( echo $IMAGE | sed 's/@/ /g' )
       ORIGINAL_WIDTH=$( identify -format '%w' ${IMAGE} )
@@ -67,7 +66,7 @@ function orozco {
         mv "${ORIGINAL}.tmp" "${ORIGINAL}"
         informa "${ORIGINAL}" "resized to max width" "${WIDTH}"
       fi
-      jpegoptim --force --max=70 --strip-all ${ORIGINAL}
+      jpegoptim --force --max=70 ${ORIGINAL}
     done
   fi
 
